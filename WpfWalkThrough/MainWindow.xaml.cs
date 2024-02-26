@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,16 +15,31 @@ namespace WpfWalkThrough
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        string lastClick;
+        public string LastClick 
+        { 
+            get => lastClick; 
+            set 
+            { 
+                lastClick = value; 
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastClick")); 
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            LastClick = "Zatím nic";
+            DataContext = this;
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            //MessageBox.Show($"Mouse Up on element {e.Source}");
+            LastClick = e.Source.ToString().ToUpper();
             label.Content += "\n" +e.Source.ToString();
         }
     }
