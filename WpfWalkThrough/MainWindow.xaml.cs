@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfWalkThrough.Properties;
 
 namespace WpfWalkThrough
 {
@@ -17,13 +18,22 @@ namespace WpfWalkThrough
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        // Tohle je "plain vanilla" řešení pro binding
+        // privátní pole třídy typu string ...
         string lastClick;
+
+        // ... je odkazované z vlastnosti podobného jména - Konvence: vlastnosti jsou s velkým počátečním písmenem
         public string LastClick 
         { 
             get => lastClick; 
             set 
             { 
+                // Když se změní hodnota vlastnosti ...
                 lastClick = value; 
+
+                // ... oznam WPF UI, že se musí překreslit část uživatelského interface,
+                // která má binding na LastClick.
+                // Operátor ?. zajistí, že se Invoke zavolá jenom když PropertyChanged != null
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastClick")); 
             }
         }
@@ -31,7 +41,8 @@ namespace WpfWalkThrough
         public MainWindow()
         {
             InitializeComponent();
-            LastClick = "Zatím nic";
+
+            // všechny valastnosti, které mají binding se budou hledat v této třídě
             DataContext = this;
         }
 
@@ -39,8 +50,17 @@ namespace WpfWalkThrough
 
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
+            // Tady jenom měníme hodnotu vlastnosti,
+            // takže se zavolá její setter
+            // a ze setteru se zavolá PropertyChanged.Invoke(...)
             LastClick = e.Source.ToString().ToUpper();
-            label.Content += "\n" +e.Source.ToString();
+            // V tomto případě se tedy vyhneme přímému volání
+            // jména prvku UI, který se má změnit.
+            // To nám umožňuje zpracovávat a testova logiku aplikace bez ohledu 
+            // na její prezentaci v GUI, kterou můžeme realizovat bindingem později.
+
+            // Tady přímo měníme obsah prvku, který voláme přímo jménem (label1)
+            label1.Content += "\n" +e.Source.ToString();
         }
     }
 }

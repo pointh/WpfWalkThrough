@@ -7,6 +7,7 @@
         <Style TargetType="Button">
             <Setter Property="Background" Value="Green" />
             <Setter Property="BorderBrush" Value="Yellow" />
+            <Setter Property="BorderThickness" Value="5"/>
             <Setter Property="FontSize" Value="30" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Margin" Value="25" />
