@@ -26,9 +26,9 @@ namespace WpfWalkThrough.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Na mě taky klikni")]
-        public string ZatimNic {
+        public string MeTaky {
             get {
-                return ((string)(this["ZatimNic"]));
+                return ((string)(this["MeTaky"]));
             }
         }
     }

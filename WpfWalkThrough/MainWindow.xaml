@@ -8,7 +8,7 @@
     xmlns:properties="clr-namespace:WpfWalkThrough.Properties"
     Title="{x:Static properties:Resource1.AppTitle}"
     Width="800"
-    Height="250"
+    Height="350"
     PreviewMouseUp="Window_PreviewMouseUp"
     mc:Ignorable="d">
     <!--
@@ -30,10 +30,10 @@
             <Setter Property="Margin" Value="25" />
         </Style>
         <Style x:Key="LabelLocal" TargetType="Label">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="White" />
         </Style>
         <Style x:Key="ScrollLocal" TargetType="ScrollViewer">
-            <Setter Property="Background" Value="Gray"/>
+            <Setter Property="Background" Value="Gray" />
         </Style>
     </Window.Resources>
 
@@ -41,19 +41,26 @@
         <DockPanel>
             <!--  Použijeme lokální styl  -->
             <ScrollViewer x:Name="Scroll1" Style="{StaticResource ScrollLocal}">
-                <Label x:Name="label1" Style="{StaticResource LabelLocal}"/>
+                <Label x:Name="label1" Style="{StaticResource LabelLocal}" />
             </ScrollViewer>
 
             <!--  Použijeme lokální styl  -->
-            <Button x:Name="button" Style="{StaticResource WindowLocal}">Klikni na mě!</Button>
+            <Button x:Name="button" Style="{StaticResource WindowLocal}">
+                <StackPanel>
+                    <Image x:Name="ButtonImage" Source="Images/HandRight.png" Width="40" Height="40" Margin="5" MouseEnter="ButtonImage_MouseEnter"/>
+                    <TextBlock>Klikni na mě!</TextBlock>
+                </StackPanel>
+            </Button>
 
             <!--  Použijeme globální styl definovaný v App.xaml a platný pro všechny prvky typu Button v aplikaci  -->
-            <Button x:Name="buttonToo" Content="{Binding Source={x:Static properties:Settings.Default}, Path='ZatimNic'}" />
+            <Button x:Name="buttonToo" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
             <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
         </DockPanel>
         <TextBlock
             VerticalAlignment="Bottom"
             FontWeight="DemiBold"
+            Background="Black"
+            Foreground="White"
             Text="{Binding LastClick}" />
     </StackPanel>
 </Window>

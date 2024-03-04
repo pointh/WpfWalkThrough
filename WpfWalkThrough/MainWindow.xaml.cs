@@ -34,7 +34,11 @@ namespace WpfWalkThrough
                 // ... oznam WPF UI, že se musí překreslit část uživatelského interface,
                 // která má binding na LastClick.
                 // Operátor ?. zajistí, že se Invoke zavolá jenom když PropertyChanged != null
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastClick")); 
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastClick)));
+                // To je stejné jako PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastClick")); 
+                // nameof(LastClick) nám kompilátor vyhodí jako chybu, když změníme název vlastnosti LastClick,
+                // což u stringu "LastClick" udělat nemůže - string jako string
+                // To může vést k nepříjemným chybám při REFAKTORINGU
             }
         }
 
@@ -42,7 +46,8 @@ namespace WpfWalkThrough
         {
             InitializeComponent();
 
-            // všechny valastnosti, které mají binding se budou hledat v této třídě
+            // všechny valastnosti, které mají binding z příslušného XAML souboru (MainWindow.xaml)
+            // se budou hledat v této třídě.
             DataContext = this;
         }
 
@@ -61,6 +66,11 @@ namespace WpfWalkThrough
 
             // Tady přímo měníme obsah prvku, který voláme přímo jménem (label1)
             label1.Content += "\n" +e.Source.ToString();
+        }
+
+        private void ButtonImage_MouseEnter(object sender, MouseEventArgs e)
+        {
+            label1.Content += "\n" + "Myš přišla";
         }
     }
 }
