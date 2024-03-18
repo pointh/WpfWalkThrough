@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:WpfWalkThrough"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:WpfWalkThrough.Properties"
     Title="{x:Static properties:Resource1.AppTitle}"
@@ -37,30 +36,58 @@
         </Style>
     </Window.Resources>
 
-    <StackPanel>
-        <DockPanel>
-            <!--  Použijeme lokální styl  -->
-            <ScrollViewer x:Name="Scroll1" Style="{StaticResource ScrollLocal}">
-                <Label x:Name="label1" Style="{StaticResource LabelLocal}" />
-            </ScrollViewer>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!--  Použijeme lokální styl  -->
-            <Button x:Name="button" Style="{StaticResource WindowLocal}">
-                <StackPanel>
-                    <Image x:Name="ButtonImage" Source="Images/HandRight.png" Width="40" Height="40" Margin="5" MouseEnter="ButtonImage_MouseEnter"/>
-                    <TextBlock>Klikni na mě!</TextBlock>
-                </StackPanel>
-            </Button>
+        <ListView x:Name="LVHistory"
+            Grid.Row="0"
+            Grid.Column="0"
+            ItemsSource="{Binding History}"            
+            Background="Beige"
+            Foreground="Black"
+            >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
-            <!--  Použijeme globální styl definovaný v App.xaml a platný pro všechny prvky typu Button v aplikaci  -->
-            <Button x:Name="buttonToo" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
-            <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
-        </DockPanel>
+        <!--  Použijeme lokální styl  -->
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource WindowLocal}">
+            <StackPanel>
+                <Image
+                    x:Name="ButtonImage"
+                    Width="40"
+                    Height="40"
+                    Margin="5"
+                    Source="Images/HandRight.png" />
+                <TextBlock>Klikni na mě!</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <!--  Použijeme globální styl definovaný v App.xaml a platný pro všechny prvky typu Button v aplikaci  -->
+        <Button Grid.Column="2" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
+        <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
+
         <TextBlock
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
             VerticalAlignment="Bottom"
-            FontWeight="DemiBold"
             Background="Black"
+            FontWeight="DemiBold"
             Foreground="White"
             Text="{Binding LastClick}" />
-    </StackPanel>
+    </Grid>
 </Window>
