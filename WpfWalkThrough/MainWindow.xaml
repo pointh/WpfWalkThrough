@@ -47,7 +47,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListView x:Name="LVHistory"
+        <ListView
             Grid.Row="0"
             Grid.Column="0"
             ItemsSource="{Binding History}"            
