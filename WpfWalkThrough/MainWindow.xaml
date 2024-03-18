@@ -10,17 +10,8 @@
     Height="350"
     PreviewMouseUp="Window_PreviewMouseUp"
     mc:Ignorable="d">
-    <!--
-        xmlns:properties="clr-namespace:WpfWalkThrough.Properties" vytvoří nový jmenný prostor, do kterého se
-        budeme odkazovat pod jménem "properties"
-    -->
-    <!--
-        Název okna vezmeme ze souboru Resource1, ve kterém hledáme záznam s klíčem 'AppTitle',
-        Access modifier musí být public!
-    -->
 
     <Window.Resources>
-        <!--  Tento Resource má rozsah jen pro toto Window - proto se jmenuje ...něcoLocal  -->
         <Style x:Key="WindowLocal" TargetType="Button">
             <Setter Property="Background" Value="Orange" />
             <Setter Property="BorderBrush" Value="Crimson" />
@@ -50,18 +41,22 @@
         <ListView
             Grid.Row="0"
             Grid.Column="0"
-            ItemsSource="{Binding History}"            
             Background="Beige"
             Foreground="Black"
-            >
+            ItemsSource="{Binding Bodies}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/HandRight.png" Width="20" Height="20"/>
+                        <Label Content=" "/>
+                        <TextBlock Text="{Binding Weight}" />
+                        <TextBlock Text=" | "/>
+                        <TextBlock Text="{Binding HitTime}" />
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <!--  Použijeme lokální styl  -->
         <Button
             Grid.Row="0"
             Grid.Column="1"
@@ -77,9 +72,7 @@
             </StackPanel>
         </Button>
 
-        <!--  Použijeme globální styl definovaný v App.xaml a platný pro všechny prvky typu Button v aplikaci  -->
         <Button Grid.Column="2" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
-        <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
 
         <TextBlock
             Grid.Row="2"

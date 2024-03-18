@@ -5,16 +5,24 @@ using System.Windows.Input;
 
 namespace WpfWalkThrough
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    public class Body
+    {
+        public double Weight { get; set; }
+        public DateTime HitTime { get; set; }
+
+        public Body(double _weight)
+        {
+            Weight = _weight;
+            HitTime = DateTime.Now;
+        }
+    }
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         // **ObservableCollection** má schopnost volat aktualizaci připojeného ListView
         // při kažné změně obsahu
-        public ObservableCollection<string> History {  get; set; }
+        public ObservableCollection<Body> Bodies { get; set; }
 
         string? lastClick;
 
@@ -26,9 +34,10 @@ namespace WpfWalkThrough
                 // Když se změní hodnota vlastnosti ...
                 lastClick = value;
                 
+                // Kliknutí vždy zároveň vytvoří novou instanci Body
                 if (value != null) 
                 {
-                    History.Add(value);
+                    Bodies.Add(new Body(20));
                 }
                 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastClick)));
@@ -39,7 +48,7 @@ namespace WpfWalkThrough
         {
             InitializeComponent();
 
-            History = new ObservableCollection<string>();
+            Bodies = new ObservableCollection<Body>();
             DataContext = this;
         }
 
