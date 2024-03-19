@@ -9,29 +9,23 @@ using System.Windows.Controls;
 
 namespace WpfWalkThrough
 {
-
-
     internal class SurnameEntry : TextBox, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string EdtText
+        protected override void OnTextChanged(TextChangedEventArgs e)
         {
-            get => Text;
-            set
+            base.OnTextChanged(e);
+            
+            if ((e.Source as TextBox)?.Text?.Length > 3)
             {
-                Text = value;
-                if (value.Length > 3)
-                {
-                    EdtErr = string.Empty;
-                    EdtErrVisible = Visibility.Collapsed;
-                }
-                else
-                {
-                    EdtErr = "Příliš krátké";
-                    EdtErrVisible = Visibility.Visible;
-                }
+                EdtErr = string.Empty;
+                EdtErrVisible = Visibility.Collapsed;
+                return;
             }
+
+            EdtErr = "Příliš krátké";
+            EdtErrVisible = Visibility.Visible;
         }
 
         Visibility edtErrVisible;
@@ -45,7 +39,6 @@ namespace WpfWalkThrough
             }
         }
 
-
         string edtErr;
         public string EdtErr
         {
@@ -56,7 +49,5 @@ namespace WpfWalkThrough
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtErr)));
             }
         }
-
     }
-
 }

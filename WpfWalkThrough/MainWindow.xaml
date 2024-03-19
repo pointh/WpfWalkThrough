@@ -66,5 +66,6 @@
             Background="Black"
             Foreground="White"
             Text="{Binding LastClick}" />
+        <local:SurnameEntry Text="xx"/>
     </StackPanel>
 </Window>
