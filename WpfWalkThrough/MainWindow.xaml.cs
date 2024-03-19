@@ -13,6 +13,7 @@ using WpfWalkThrough.Properties;
 
 namespace WpfWalkThrough
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -90,8 +91,6 @@ namespace WpfWalkThrough
                     EdtErr = "Příliš krátké";
                     EdtErrVisible = Visibility.Visible;
                 }
-
-                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtText)));
             }
         }
 
