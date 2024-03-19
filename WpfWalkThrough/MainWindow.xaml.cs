@@ -23,13 +23,13 @@ namespace WpfWalkThrough
         string lastClick;
 
         // ... je odkazované z vlastnosti podobného jména - Konvence: vlastnosti jsou s velkým počátečním písmenem
-        public string LastClick 
-        { 
-            get => lastClick; 
-            set 
-            { 
+        public string LastClick
+        {
+            get => lastClick;
+            set
+            {
                 // Když se změní hodnota vlastnosti ...
-                lastClick = value; 
+                lastClick = value;
 
                 // ... oznam WPF UI, že se musí překreslit část uživatelského interface,
                 // která má binding na LastClick.
@@ -65,12 +65,58 @@ namespace WpfWalkThrough
             // na její prezentaci v GUI, kterou můžeme realizovat bindingem později.
 
             // Tady přímo měníme obsah prvku, který voláme přímo jménem (label1)
-            label1.Content += "\n" +e.Source.ToString();
+            label1.Content += "\n" + e.Source.ToString();
         }
 
         private void ButtonImage_MouseEnter(object sender, MouseEventArgs e)
         {
             label1.Content += "\n" + "Myš přišla";
         }
+
+        string edtText;
+        public string EdtText
+        {
+            get => edtText;
+            set
+            {
+                edtText = value;
+                if (value.Length > 3)
+                {
+                    EdtErr = string.Empty;
+                    EdtErrVisible = Visibility.Collapsed;
+                }
+                else
+                {
+                    EdtErr = "Příliš krátké";
+                    EdtErrVisible = Visibility.Visible;
+                }
+
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtText)));
+            }
+        }
+
+        Visibility edtErrVisible;
+        public Visibility EdtErrVisible
+        {
+            get => edtErrVisible;
+            set
+            {
+                edtErrVisible = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtErrVisible)));
+            }
+        }
+
+
+        string edtErr;
+        public string EdtErr
+        {
+            get => edtErr;
+            set
+            {
+                edtErr = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtErr)));
+            }
+        }
+
     }
 }

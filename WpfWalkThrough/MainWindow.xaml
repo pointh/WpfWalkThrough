@@ -55,6 +55,10 @@
             <!--  Použijeme globální styl definovaný v App.xaml a platný pro všechny prvky typu Button v aplikaci  -->
             <Button x:Name="buttonToo" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
             <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
+            <StackPanel Orientation="Vertical">
+                <TextBox Text="{Binding EdtText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="{Binding EdtErr}" Visibility="{Binding EdtErrVisible}" Foreground="Red"/>
+            </StackPanel>
         </DockPanel>
         <TextBlock
             VerticalAlignment="Bottom"
