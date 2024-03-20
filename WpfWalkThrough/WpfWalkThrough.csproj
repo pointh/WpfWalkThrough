@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SurnameEntry.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Images\HandRight.jpg" />
   </ItemGroup>
 

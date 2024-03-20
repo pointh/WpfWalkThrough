@@ -47,7 +47,13 @@
             <!--  Použijeme lokální styl  -->
             <Button x:Name="button" Style="{StaticResource WindowLocal}">
                 <StackPanel>
-                    <Image x:Name="ButtonImage" Source="Images/HandRight.png" Width="40" Height="40" Margin="5" MouseEnter="ButtonImage_MouseEnter"/>
+                    <Image
+                        x:Name="ButtonImage"
+                        Width="40"
+                        Height="40"
+                        Margin="5"
+                        MouseEnter="ButtonImage_MouseEnter"
+                        Source="Images/HandRight.png" />
                     <TextBlock>Klikni na mě!</TextBlock>
                 </StackPanel>
             </Button>
@@ -56,14 +62,17 @@
             <Button x:Name="buttonToo" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
             <!--  Nápis na tlačítku vezmeme z prostoru properties, ze souboru Settings a klíčem 'ZatimNic'  -->
             <StackPanel Orientation="Vertical">
-                <TextBox Text="{Binding EdtText, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Text="{Binding EdtErr}" Visibility="{Binding EdtErrVisible}" Foreground="Red"/>
+                <TextBox Text="{Binding EdtText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                <TextBlock
+                    Foreground="Red"
+                    Text="{Binding EdtErr}"
+                    Visibility="{Binding EdtErrVisible}" />
             </StackPanel>
         </DockPanel>
         <TextBlock
             VerticalAlignment="Bottom"
-            FontWeight="DemiBold"
             Background="Black"
+            FontWeight="DemiBold"
             Foreground="White"
             Text="{Binding LastClick}" />
     </StackPanel>
