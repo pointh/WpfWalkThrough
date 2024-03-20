@@ -36,6 +36,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ListView
@@ -82,5 +84,10 @@
             FontWeight="DemiBold"
             Foreground="White"
             Text="{Binding LastClick}" />
+        
+        <StackPanel Grid.Row="3" Margin="40, 0">
+            <TextBox Text="{Binding EdtText, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="{Binding EdtErr}" Visibility="{Binding EdtErrVisible}" Foreground="Red"/>
+        </StackPanel>
     </Grid>
 </Window>

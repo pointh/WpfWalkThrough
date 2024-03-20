@@ -51,7 +51,7 @@ namespace WpfWalkThrough
         public MainWindow()
         {
             InitializeComponent();
-
+            edtText = edtErr = string.Empty;
             Bodies = new ObservableCollection<Body>();
             DataContext = this;
         }
@@ -61,22 +61,16 @@ namespace WpfWalkThrough
             // Tady jenom měníme hodnotu vlastnosti,
             // takže se zavolá její setter
             // a ze setteru se zavolá PropertyChanged.Invoke(...)
-            LastClick = e.Source.ToString().ToUpper();
+            LastClick = e?.Source?.ToString()?.ToUpper();
             // V tomto případě se tedy vyhneme přímému volání
             // jména prvku UI, který se má změnit.
             // To nám umožňuje zpracovávat a testova logiku aplikace bez ohledu 
             // na její prezentaci v GUI, kterou můžeme realizovat bindingem později.
 
             // Tady přímo měníme obsah prvku, který voláme přímo jménem (label1)
-            label1.Content += "\n" + e.Source.ToString();
         }
 
-        private void ButtonImage_MouseEnter(object sender, MouseEventArgs e)
-        {
-            label1.Content += "\n" + "Myš přišla";
-        }
-
-        string edtText;
+         string edtText;
         public string EdtText
         {
             get => edtText;
