@@ -3,91 +3,99 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WpfWalkThrough"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:WpfWalkThrough.Properties"
-    Title="{x:Static properties:Resource1.AppTitle}"
+    Title="Manželé"
     Width="800"
-    Height="350"
-    PreviewMouseUp="Window_PreviewMouseUp"
+    Height="600"
     mc:Ignorable="d">
 
     <Window.Resources>
-        <Style x:Key="WindowLocal" TargetType="Button">
-            <Setter Property="Background" Value="Orange" />
-            <Setter Property="BorderBrush" Value="Crimson" />
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="25" />
-        </Style>
-        <Style x:Key="LabelLocal" TargetType="Label">
-            <Setter Property="Foreground" Value="White" />
-        </Style>
-        <Style x:Key="ScrollLocal" TargetType="ScrollViewer">
-            <Setter Property="Background" Value="Gray" />
-        </Style>
+        <ResourceDictionary>
+            <Style x:Key="Entry" TargetType="TextBox">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            <Style x:Key="Combo" TargetType="ComboBox">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="Background" Value="Blue" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            <local:EnumToStringConverter x:Key="EnumToStringConverter" />
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListView
+
+        <Label
             Grid.Row="0"
             Grid.Column="0"
+            Content="Jmeno" />
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Style="{StaticResource Entry}"
+            Text="{Binding On, UpdateSourceTrigger=PropertyChanged}" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Content="Jmeno" />
+        <ComboBox
+            Grid.Row="1"
+            Grid.Column="1"
+            ItemsSource="{Binding StavStr.Values}"
+            Style="{StaticResource Combo}"
+            Text="{Binding Stav, Converter={StaticResource EnumToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Content="Jmeno" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Style="{StaticResource Entry}"
+            Text="{Binding Ona, UpdateSourceTrigger=PropertyChanged}" />
+
+
+        <Button
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Click="Button_Click"
+            Content="Ulož" />
+
+        <ListView
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             Background="Beige"
             Foreground="Black"
-            ItemsSource="{Binding Bodies}">
+            ItemsSource="{Binding Manzele}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Images/HandRight.png" Width="20" Height="20"/>
-                        <Label Content=" "/>
                         <TextBlock Text="{Binding Weight}" />
-                        <TextBlock Text=" | "/>
+                        <TextBlock Text=" | " />
                         <TextBlock Text="{Binding HitTime}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-        <Button
-            Grid.Row="0"
-            Grid.Column="1"
-            Style="{StaticResource WindowLocal}">
-            <StackPanel>
-                <Image
-                    x:Name="ButtonImage"
-                    Width="40"
-                    Height="40"
-                    Margin="5"
-                    Source="Images/HandRight.png" />
-                <TextBlock>Klikni na mě!</TextBlock>
-            </StackPanel>
-        </Button>
-
-        <Button Grid.Column="2" Content="{Binding Source={x:Static properties:Settings.Default}, Path='MeTaky'}" />
-
-        <TextBlock
-            Grid.Row="2"
-            Grid.ColumnSpan="3"
-            VerticalAlignment="Bottom"
-            Background="Black"
-            FontWeight="DemiBold"
-            Foreground="White"
-            Text="{Binding LastClick}" />
-        
-        <StackPanel Grid.Row="3" Margin="40, 0">
-            <TextBox Text="{Binding EdtText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="{Binding EdtErr}" Visibility="{Binding EdtErrVisible}" Foreground="Red"/>
-        </StackPanel>
     </Grid>
+
+
+
 </Window>

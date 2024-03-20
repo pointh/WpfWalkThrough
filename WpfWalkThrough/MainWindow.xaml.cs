@@ -1,117 +1,71 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
 namespace WpfWalkThrough
 {
-    
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public class Body
-    {
-        public double Weight { get; set; }
-        public DateTime HitTime { get; set; }
-
-        public Body(double _weight)
-        {
-            Weight = _weight;
-            HitTime = DateTime.Now;
-        }
-    }
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         // **ObservableCollection** má schopnost volat aktualizaci připojeného ListView
         // při kažné změně obsahu
-        public ObservableCollection<Body> Bodies { get; set; }
+        public ObservableCollection<Person> Manzele { get; set; }
 
-        string? lastClick;
-
-        public string? LastClick 
-        { 
-            get => lastClick; 
-            set 
-            { 
-                // Když se změní hodnota vlastnosti ...
-                lastClick = value;
-                
-                // Kliknutí vždy zároveň vytvoří novou instanci Body
-                if (value != null) 
-                {
-                    Bodies.Add(new Body(20));
-                }
-                
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastClick)));
-            }
-        }
+        public static Dictionary<Stav, string> StavStr { get; set; } = new Dictionary<Stav, string>()
+        {
+            { Stav.Svobodny, "Svobodný" },
+            { Stav.Zenaty, "Ženatý" },
+            { Stav.Rozvedeny, "Rozvedený" }
+        };
 
         public MainWindow()
         {
             InitializeComponent();
-            edtText = edtErr = string.Empty;
-            Bodies = new ObservableCollection<Body>();
+            Manzele = new ObservableCollection<Person>();
             DataContext = this;
         }
 
-        private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        string on = "";
+        public string On
         {
-            // Tady jenom měníme hodnotu vlastnosti,
-            // takže se zavolá její setter
-            // a ze setteru se zavolá PropertyChanged.Invoke(...)
-            LastClick = e?.Source?.ToString()?.ToUpper();
-            // V tomto případě se tedy vyhneme přímému volání
-            // jména prvku UI, který se má změnit.
-            // To nám umožňuje zpracovávat a testova logiku aplikace bez ohledu 
-            // na její prezentaci v GUI, kterou můžeme realizovat bindingem později.
-
-            // Tady přímo měníme obsah prvku, který voláme přímo jménem (label1)
-        }
-
-         string edtText;
-        public string EdtText
-        {
-            get => edtText;
+            get => on;
             set
             {
-                edtText = value;
-                if (value.Length > 3)
-                {
-                    EdtErr = string.Empty;
-                    EdtErrVisible = Visibility.Collapsed;
-                }
-                else
-                {
-                    EdtErr = "Příliš krátké";
-                    EdtErrVisible = Visibility.Visible;
-                }
+                on = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(On)));
             }
         }
 
-        Visibility edtErrVisible;
-        public Visibility EdtErrVisible
+        string ona = "";
+        public string Ona
         {
-            get => edtErrVisible;
+            get => ona;
             set
             {
-                edtErrVisible = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtErrVisible)));
+                ona = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Ona)));
             }
         }
 
-
-        string edtErr;
-        public string EdtErr
+        Stav stav;
+        public Stav Stav
         {
-            get => edtErr;
+            get => stav;
             set
             {
-                edtErr = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EdtErr)));
+                stav = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Stav)));
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Person p = new Person(On, Stav, Ona);
+            Debug.WriteLine(p);
+            Manzele.Add(p);
+        }
     }
 }
