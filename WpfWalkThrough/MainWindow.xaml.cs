@@ -14,12 +14,7 @@ namespace WpfWalkThrough
         // při kažné změně obsahu
         public ObservableCollection<Person> Manzele { get; set; }
 
-        public static Dictionary<Stav, string> StavStr { get; set; } = new Dictionary<Stav, string>()
-        {
-            { Stav.Svobodny, "Svobodný" },
-            { Stav.Zenaty, "Ženatý" },
-            { Stav.Rozvedeny, "Rozvedený" }
-        };
+        public static string[] StavValues { get; set; } = EnumToStringConverter.StavStr.Values.ToArray();
 
         public MainWindow()
         {

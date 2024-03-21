@@ -57,7 +57,7 @@
         <ComboBox
             Grid.Row="1"
             Grid.Column="1"
-            ItemsSource="{Binding StavStr.Values}"
+            ItemsSource="{Binding StavValues}"
             Style="{StaticResource Combo}"
             Text="{Binding Stav, Converter={StaticResource EnumToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />
         <Label
@@ -81,16 +81,36 @@
             Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
+            VerticalAlignment="Top"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
             Background="Beige"
             Foreground="Black"
             ItemsSource="{Binding Manzele}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Weight}" />
-                        <TextBlock Text=" | " />
-                        <TextBlock Text="{Binding HitTime}" />
-                    </StackPanel>
+                    <Grid ShowGridLines="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Text="{Binding On}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Text="{Binding Stav, Converter={StaticResource EnumToStringConverter}}" />
+
+                        <TextBlock
+                            Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            Text="{Binding Ona}" />
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

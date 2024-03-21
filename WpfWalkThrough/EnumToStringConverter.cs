@@ -5,12 +5,19 @@ namespace WpfWalkThrough
 {
     public class EnumToStringConverter : IValueConverter
     {
+        public static Dictionary<Stav, string> StavStr { get; set; } = new Dictionary<Stav, string>()
+        {
+            { Stav.Svobodny, "Svobodný" },
+            { Stav.Zenaty, "Ženatý" },
+            { Stav.Rozvedeny, "Rozvedený" }
+        };
+
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || (int)value > MainWindow.StavStr.Count)
+            if (value == null || (int)value > StavStr.Count)
                 return null;
 
-            string s = MainWindow.StavStr[(Stav)value];
+            string s = StavStr[(Stav)value];
             return s;
         }
 
@@ -21,8 +28,8 @@ namespace WpfWalkThrough
                 return null;
             }
 
-            Stav k = MainWindow.StavStr.First(x => x.Value == (string)value).Key;
-            return k;
+            // Stav k = MainWindow.StavStr.First(x => x.Value == (string)value).Key;
+            return StavStr.FirstOrDefault(x => x.Value == (string)value).Key;
 
         }
     }
