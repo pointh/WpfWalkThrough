@@ -5,10 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WpfWalkThrough"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:WpfWalkThrough.Properties"
     Title="Manželé"
     Width="800"
-    Height="600"
+    Height="800"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -16,69 +15,175 @@
             <Style x:Key="Entry" TargetType="TextBox">
                 <Setter Property="FontSize" Value="20" />
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
-                <Setter Property="Margin" Value="5" />
+                <!--
+                    Margin je string, který si převede WPF na čtyři hodnoty typu int automaticky,
+                    tedy WPF už v sobě má Converter ze stringu na 4 celá čísla.
+                    Margin může mít jednu hodnotu, potom se použije na všechny strany, nebo dvě hodnoty,
+                    potom se použije na okraje po stranách vleva,vpravo a nahoru, dolů.
+                    Pokud má Margin 4 hodnoty, je okraj na každé straně jiný.
+                    Pořadí stran je Západ, Sever, Východ, Jih, použitý Margin nastavuje okraje
+                    Západ, Sever, Východ na hodnotu 5 a Jih, tedy spodní okraj na hodnotu 20.
+                    Vytváříme tím prostor pro zobrazení chybové zprávy, pokud na TextBodu neprojde
+                    validace a zobrazí se chybová zpráva.
+                -->
+                <Setter Property="Margin" Value="5,5,5,20" />
             </Style>
             <Style x:Key="Combo" TargetType="ComboBox">
-                <Setter Property="FontSize" Value="20" />
-                <Setter Property="Background" Value="Blue" />
-                <Setter Property="Margin" Value="5" />
+                <Setter Property="FontSize" Value="18" />
             </Style>
+
+            <!--
+                WPF prvky nejsou přímo schopné zobrazovat cokoliv, mimo stringu a pokud
+                potřebujeme zobrazovat něco jiného, musíme napsat "Converter". To je třída,
+                která obsahuje metody pro převedení nějakého datového typu, v našem případě
+                enum Stav, na string a naopak ze stringu zpět do enum.
+                Podrobnosti najdete v souboru EnumToStringConverter.cs
+            -->
             <local:EnumToStringConverter x:Key="EnumToStringConverter" />
+
+            <!--
+                Validátor je třída, která obsahuje pravidla pro validaci jednoho pole
+                ve formuláři. Musí dědit z abstraktní třídy ValidationRule a vrací typ ValidationResult,
+                který obsahuje informaci, zda validace proběhla úspěšně a chybovou zprávu v případě,
+                že validace neprošla.
+                Podrobnosti najdete v souboru Validators.cs
+            -->
+            <local:NameValidation x:Key="NameValidation" />
+
+            <!--
+                ControlTemplate umožňuje modifikovat zobrazení nebo chování elementu ve formuláři.
+                V tomto případě chceme, aby každý element, který má připojený ControlTemplate s názvem
+                ErrorTemplate, vykreslil po obvodu červný rámeček a aby pod sebou zobrazil chybovou
+                zprávu.
+            -->
+            <ControlTemplate x:Key="ErrorTemplate">
+                <StackPanel>
+                    <!--  Element, ve kterém je chyba, bude mít červený rámeček  -->
+                    <Border
+                        BorderBrush="Red"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                        <!--
+                            AdornedElementPlaceholder je element, ke kterému se vztahuje
+                            chybová zpráva.
+                        -->
+                        <AdornedElementPlaceholder />
+                    </Border>
+                    <!--  Chybová zpráva bude pod elementem s chybou  -->
+                    <TextBlock Foreground="Red" Text="{Binding ErrorContent}" />
+                </StackPanel>
+            </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid Margin="0,0,0,60">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-
 
         <Label
             Grid.Row="0"
             Grid.Column="0"
-            Content="Jmeno" />
+            Content="Manžel" />
+        <!--
+            AdornedElementPlaceholder zde bude TextBox, ke kterému se přípojí ControlTemplate
+            ErrorTemplate (viz výše)
+        -->
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
+            d:Text="Eduard Kubeš"
             Style="{StaticResource Entry}"
-            Text="{Binding On, UpdateSourceTrigger=PropertyChanged}" />
+            Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
+            <TextBox.Text>
+                <!--
+                    Změna v TextBoxu se bude při každné změně projevovat ve vlastnosti "On",
+                    ale jenom v případě, že projde úspěšná validace v metodě Validate() ve třídě
+                    NameValidation.
+                -->
+                <Binding Path="On" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <local:NameValidation />
+                        <!--  třídu jsme registrovali v resources s klíčem  -->
+                    </Binding.ValidationRules>
+                    <!--  NameValidation - shoda je pouze náhodná a klíč  -->
+                </Binding>
+                <!--  nemusí být stejný jako název třídy  -->
+            </TextBox.Text>
+        </TextBox>
         <Label
             Grid.Row="1"
             Grid.Column="0"
-            Content="Jmeno" />
+            Content="Stav" />
         <ComboBox
             Grid.Row="1"
             Grid.Column="1"
+            Margin="5,5,5,50"
             ItemsSource="{Binding StavValues}"
+            SelectedIndex="0"
             Style="{StaticResource Combo}"
             Text="{Binding Stav, Converter={StaticResource EnumToStringConverter}, UpdateSourceTrigger=PropertyChanged}" />
         <Label
             Grid.Row="2"
             Grid.Column="0"
-            Content="Jmeno" />
+            Content="Manželka" />
+        <!--  platí totéž, co platilo pro předchozí TextBox, ale tady je binding na vlastnost "Ona"  -->
         <TextBox
             Grid.Row="2"
             Grid.Column="1"
+            d:Text="Valerie Čižmárová"
             Style="{StaticResource Entry}"
-            Text="{Binding Ona, UpdateSourceTrigger=PropertyChanged}" />
+            Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
+            <TextBox.Text>
+                <Binding Path="Ona" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <local:NameValidation />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-
-        <Button
+        <!--
+            V programu máme dva typy validací. Jeden typ je izolovaný na jeden prvek a neřeší
+            vztahy mezi prvky. Druhý typ prověřuje, zda jsou správné vztahy mezi prvky, tedy v našem
+            případě, je Manžel ve stavu ženatý, musí mít manželku. Pokud je svobodný nebo rozvedený,
+            Manželku nesmí mít uvedenou.
+            V tomto TextBlocku se zobrazuje výsledek validace vztahý mezi poli.
+        -->
+        <TextBlock
             Grid.Row="3"
+            Grid.ColumnSpan="2"
+            d:Text="Chybová zpráva hodně dlouhá"
+            Background="White"
+            Foreground="Red"
+            Text="{Binding ErrorText}" />
+
+        <!--
+            Button ukládá záznam do ObservableCollection Manzele, a protože je typu Observable,
+            aktualizace mezi vlastností Manzele a ListView se provádí automaticky.
+        -->
+        <Button
+            Grid.Row="4"
             Grid.ColumnSpan="2"
             Click="Button_Click"
             Content="Ulož" />
 
+        <!--
+            ListView se roztáhne na celou dostupnou plochu (Stretch horizontálně i vertikálně.
+            Položky ListView se nabírají z vlastnosti ObservableCollection Manzele. Kdyby to byl
+            obyčejný List, neaktualizoval by se ListView automaticky.
+        -->
         <ListView
-            Grid.Row="4"
+            Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             VerticalAlignment="Top"
@@ -87,6 +192,11 @@
             Background="Beige"
             Foreground="Black"
             ItemsSource="{Binding Manzele}">
+
+            <!--
+                Tady je popis toho, jak bude vypadat jeden řádek v ListView. Bude to grid
+                s jedním řádkem a třemi sloupci, ve kterých budou umístěny prvky TextBlock
+            -->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid ShowGridLines="True">
@@ -101,13 +211,22 @@
                             HorizontalAlignment="Left"
                             Text="{Binding On}" />
 
+                        <!--
+                            Jediné, co umí WPF zobrazovat, je string. Pokud tedy potřebujeme pracovat
+                            s nějakým jiným typem, musíme napsat Converter - v našem případě EnumToStringConventer,
+                            který definuje, jak se enum Stav přemění na string a naopak, jak se string
+                            převede na enum Stav. EnumToStringConverter je ve stejném jmenném prostoru
+                            jako je celý zbytek projektu - tedy WpfWalkThrough.
+                            Uložený je v souboru Validations.cs.
+                        -->
                         <TextBlock
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             Text="{Binding Stav, Converter={StaticResource EnumToStringConverter}}" />
-
+                        <!--  Margin, aby nebyla Ona úplně na začátku svého pole v gridu.  -->
                         <TextBlock
                             Grid.Column="2"
+                            Margin="5,0,0,0"
                             HorizontalAlignment="Left"
                             Text="{Binding Ona}" />
                     </Grid>
@@ -115,7 +234,4 @@
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
-
-
-
 </Window>
