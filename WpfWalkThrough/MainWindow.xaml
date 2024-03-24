@@ -101,6 +101,7 @@
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
+            x:Name="tb1"
             d:Text="Eduard Kubeš"
             Style="{StaticResource Entry}"
             Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
@@ -112,7 +113,16 @@
                 -->
                 <Binding Path="On" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
-                        <local:NameValidation />
+                        <!--
+                            Když se neuvede ValidationStep, potom v případě neúspěšné validace nedojde
+                            k aktualizaci vlastnosti "On". Abychom měli v On stále aktuální hodnotu, musíme
+                            validaci provádět až poté, co se provede aktualizace On a dosáhneme toho tím,
+                            že nastavíme provedení validačního kroku na aktualizované hodnotě přiřazením
+                            ValidationStep="UpdatedValue". V tom případě se ale do validační metody nepřenáší
+                            hodnota vlastnosti, ale celý binding, ze kterého si musíme hodnotu vlastnost On
+                            "vyzobat" - viz metoda Validate v metodě NameValidation
+                        -->
+                        <local:NameValidation ValidationStep="UpdatedValue" />
                         <!--  třídu jsme registrovali v resources s klíčem  -->
                     </Binding.ValidationRules>
                     <!--  NameValidation - shoda je pouze náhodná a klíč  -->
@@ -140,13 +150,14 @@
         <TextBox
             Grid.Row="2"
             Grid.Column="1"
+            x:Name="tb2"
             d:Text="Valerie Čižmárová"
             Style="{StaticResource Entry}"
             Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
             <TextBox.Text>
                 <Binding Path="Ona" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
-                        <local:NameValidation />
+                        <local:NameValidation ValidationStep="UpdatedValue" />
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>

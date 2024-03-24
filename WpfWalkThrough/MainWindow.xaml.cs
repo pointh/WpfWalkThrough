@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WpfWalkThrough
@@ -90,6 +91,20 @@ namespace WpfWalkThrough
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var tb1Binding = tb1.GetBindingExpression(TextBox.TextProperty);
+            var tb2Binding = tb2.GetBindingExpression(TextBox.TextProperty);
+
+            if (tb1Binding?.ValidationErrors?.Count > 0)
+            {
+                AddError(On, "Není možné uložit záznam, má-li pole Manžel chybu");
+                return;
+            }
+
+            if (tb2Binding?.ValidationErrors?.Count > 0)
+            {
+                AddError(On, "Není možné uložit záznam, má-li pole Manželka chybu");
+                return;
+            }
 
             ClearErrors();
 
