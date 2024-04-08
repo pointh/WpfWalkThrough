@@ -100,7 +100,7 @@ namespace WpfWalkThrough
                 return;
             }
 
-            if (tb2Binding?.ValidationErrors?.Count > 0)
+            if (tb2Binding?.ValidationErrors?.Count > 0 && Single() == false)
             {
                 AddError(On, "Není možné uložit záznam, má-li pole Manželka chybu");
                 return;
